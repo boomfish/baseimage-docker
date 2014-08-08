@@ -19,6 +19,8 @@ PASSENGER_DOCKER_PATH = ENV['PASSENGER_PATH' ] || '../passenger-docker'
 DOCKERIZER_PATH       = ENV['DOCKERIZER_PATH'] || '../dockerizer'
 DOCKERHOST_MEMSIZE    = ENV['DOCKERHOST_MEMSIZE'] || '1024'
 DOCKERHOST_IPADDR     = ENV['DOCKERHOST_IPADDR'] || ''
+DOCKER_MINPORT        = ENV['DOCKER_MINPORT'] || '48000'
+DOCKER_MAXPORT        = ENV['DOCKER_MINPORT'] || '48199'
 
 $script = <<SCRIPT
 su - vagrant -c 'echo alias d=docker >> ~/.bash_aliases'
@@ -65,5 +67,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.provision :shell, :inline => $script
 
     config.vm.provision :docker
+  end
+
+  # Port range for use by docker containers
+  (DOCKER_MINPORT..DOCKER_MAXPORT).each do |port|
+    config.vm.network :forwarded_port, :host => port, :guest => port
   end
 end

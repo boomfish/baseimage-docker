@@ -1,5 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+Vagrant.require_version ">= 1.4"
+
 ROOT = File.dirname(File.absolute_path(__FILE__))
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
@@ -17,12 +19,6 @@ PASSENGER_DOCKER_PATH = ENV['PASSENGER_PATH' ] || '../passenger-docker'
 DOCKERIZER_PATH       = ENV['DOCKERIZER_PATH'] || '../dockerizer'
 
 $script = <<SCRIPT
-wget -q -O - https://get.docker.io/gpg | apt-key add -
-echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list
-apt-get update -qq
-apt-get install -q -y --force-yes lxc-docker
-usermod -a -G docker vagrant
-docker version
 su - vagrant -c 'echo alias d=docker >> ~/.bash_aliases'
 SCRIPT
 
@@ -50,5 +46,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   if Dir.glob("#{File.dirname(__FILE__)}/.vagrant/machines/default/*/id").empty?
     config.vm.provision :shell, :inline => $script
+
+    config.vm.provision :docker
   end
 end

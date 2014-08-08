@@ -20,6 +20,11 @@ DOCKERIZER_PATH       = ENV['DOCKERIZER_PATH'] || '../dockerizer'
 
 $script = <<SCRIPT
 su - vagrant -c 'echo alias d=docker >> ~/.bash_aliases'
+/vagrant/install-tools.sh
+mkdir -p /home/vagrant/.ssh
+cp /usr/local/share/baseimage-docker/insecure_key /home/vagrant/.ssh/id_rsa
+chown -R vagrant.vagrant /home/vagrant/.ssh
+chmod -R go= /home/vagrant/.ssh
 SCRIPT
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|

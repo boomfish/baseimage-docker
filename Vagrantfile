@@ -18,6 +18,7 @@ BASEIMAGE_PATH        = ENV['BASEIMAGE_PATH' ] || '.'
 PASSENGER_DOCKER_PATH = ENV['PASSENGER_PATH' ] || '../passenger-docker'
 DOCKERIZER_PATH       = ENV['DOCKERIZER_PATH'] || '../dockerizer'
 DOCKERHOST_MEMSIZE    = ENV['DOCKERHOST_MEMSIZE'] || '1024'
+DOCKERHOST_IPADDR     = ENV['DOCKERHOST_IPADDR'] || ''
 
 $script = <<SCRIPT
 su - vagrant -c 'echo alias d=docker >> ~/.bash_aliases'
@@ -43,6 +44,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   dockerizer_path = File.absolute_path(DOCKERIZER_PATH, ROOT)
   if File.directory?(dockerizer_path)
     config.vm.synced_folder dockerizer_path, '/vagrant/dockerizer'
+  end
+
+  if DOCKERHOST_IPADDR != ''
+    web.vm.network :private_network, ip: DOCKERHOST_IPADDR
   end
 
   config.vm.provider :virtualbox do |v|

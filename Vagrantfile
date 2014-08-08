@@ -22,6 +22,7 @@ DOCKERHOST_IPADDR     = ENV['DOCKERHOST_IPADDR'] || ''
 
 $script = <<SCRIPT
 su - vagrant -c 'echo alias d=docker >> ~/.bash_aliases'
+cp /vagrant/docker_default /etc/default/docker
 /vagrant/install-tools.sh
 mkdir -p /home/vagrant/.ssh
 cp /usr/local/share/baseimage-docker/insecure_key /home/vagrant/.ssh/id_rsa

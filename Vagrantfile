@@ -17,6 +17,7 @@ VMWARE_BOX_URL        = ENV['VMWARE_BOX_URL']  || BASE_BOX_URL + 'ubuntu-14.04-a
 BASEIMAGE_PATH        = ENV['BASEIMAGE_PATH' ] || '.'
 PASSENGER_DOCKER_PATH = ENV['PASSENGER_PATH' ] || '../passenger-docker'
 DOCKERIZER_PATH       = ENV['DOCKERIZER_PATH'] || '../dockerizer'
+DOCKERHOST_MEMSIZE    = ENV['DOCKERHOST_MEMSIZE'] || '1024'
 
 $script = <<SCRIPT
 su - vagrant -c 'echo alias d=docker >> ~/.bash_aliases'
@@ -44,9 +45,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.synced_folder dockerizer_path, '/vagrant/dockerizer'
   end
 
+  config.vm.provider :virtualbox do |v|
+	  v.memory = DOCKERHOST_MEMSIZE
+  end
+
   config.vm.provider :vmware_fusion do |f, override|
     override.vm.box_url = VMWARE_BOX_URL
     f.vmx['displayName'] = 'baseimage-docker'
+    f.vmx['memsize'] = DOCKERHOST_MEMSIZE
   end
 
   if Dir.glob("#{File.dirname(__FILE__)}/.vagrant/machines/default/*/id").empty?

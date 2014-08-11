@@ -21,6 +21,8 @@ DOCKERHOST_MEMSIZE    = ENV['DOCKERHOST_MEMSIZE'] || '1024'
 DOCKERHOST_IPADDR     = ENV['DOCKERHOST_IPADDR'] || ''
 DOCKER_MINPORT        = ENV['DOCKER_MINPORT'] || '48000'
 DOCKER_MAXPORT        = ENV['DOCKER_MINPORT'] || '48199'
+DOCKER_RUNREGISTRY    = ENV['DOCKER_RUNREGISTRY'] || 'N'
+DOCKER_REGISTRY_PATH  = ENV['DOCKER_REGISTRY_PATH'] || './docker-registry'
 
 $script = <<SCRIPT
 su - vagrant -c 'echo alias d=docker >> ~/.bash_aliases'
@@ -48,6 +50,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if File.directory?(dockerizer_path)
     config.vm.synced_folder dockerizer_path, '/vagrant/dockerizer'
   end
+  docker_registry_path = File.absolute_path(DOCKER_REGISTRY_PATH, ROOT)
+  if File.directory?(baseimage_path)
+    config.vm.synced_folder docker_registry_path, '/vagrant/docker-registry'
+  end
 
   if DOCKERHOST_IPADDR != ''
     web.vm.network :private_network, ip: DOCKERHOST_IPADDR
@@ -66,7 +72,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if Dir.glob("#{File.dirname(__FILE__)}/.vagrant/machines/default/*/id").empty?
     config.vm.provision :shell, :inline => $script
 
-    config.vm.provision :docker
+  end
+
+  config.vm.provision :docker do |d|
+    if DOCKER_RUNREGISTRY =~ /^[Yy]/
+      d.run "registry", args: "-e STORAGE_PATH=/mnt -v /vagrant/docker-registry:/mnt -p 5000:5000"
+    end
   end
 
   # Port range for use by docker containers

@@ -19,8 +19,8 @@ PASSENGER_DOCKER_PATH = ENV['PASSENGER_PATH' ] || '../passenger-docker'
 DOCKERIZER_PATH       = ENV['DOCKERIZER_PATH'] || '../dockerizer'
 DOCKERHOST_MEMSIZE    = ENV['DOCKERHOST_MEMSIZE'] || '1024'
 DOCKERHOST_IPADDR     = ENV['DOCKERHOST_IPADDR'] || ''
-DOCKER_MINPORT        = ENV['DOCKER_MINPORT'] || '48000'
-DOCKER_MAXPORT        = ENV['DOCKER_MINPORT'] || '48199'
+DOCKER_FWDPORT_MIN    = ENV['DOCKER_FWDPORT_MIN'] || '48000'
+DOCKER_FWDPORT_MAX    = ENV['DOCKER_FWDPORT_MAX'] || '48199'
 DOCKER_RUNREGISTRY    = ENV['DOCKER_RUNREGISTRY'] || 'N'
 DOCKER_REGISTRY_PATH  = ENV['DOCKER_REGISTRY_PATH'] || './docker-registry'
 
@@ -81,7 +81,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Port range for use by docker containers
-  (DOCKER_MINPORT..DOCKER_MAXPORT).each do |port|
+  (DOCKER_FWDPORT_MIN..DOCKER_FWDPORT_MAX).each do |port|
     config.vm.network :forwarded_port, :host => port, :guest => port
   end
 end

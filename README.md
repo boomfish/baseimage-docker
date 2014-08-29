@@ -578,7 +578,7 @@ These two features can be used separately or together to create a Docker develop
 
 The included Vagrantfile defines a Linux VM suitable for hosting Docker containers. It is designed for developers with Vagrant on Windows or OSX.
 
-The Vagrantfile supports the VirtualBox and VMWare Fusion providers and is built from a custom Ubuntu 14.04 box provided by Phusion that includes synced folder support. During provisioning Vagrant installs the `docker-bash` and `docker-ssh` tools into the VM and copies the insecure SSH key into the vagrant user login so you can ssh into your containers from the VM. The final step of provisioning installs the latest version of Docker.
+The Vagrantfile supports the VirtualBox and VMWare Fusion providers and is built from a custom Ubuntu 14.04 box with synced folder support. During provisioning Vagrant installs the `docker-bash` and `docker-ssh` tools into the VM and copies the insecure SSH key into the vagrant user login so you can ssh into your containers from the VM. The final step of provisioning installs the latest version of Docker.
 
 You can use `vagrant up` to launch the Docker host VM and `vagrant ssh` to login to the Docker host to work with your Docker images and containers.
 

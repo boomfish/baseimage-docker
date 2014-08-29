@@ -72,8 +72,7 @@ You can configure the stock `ubuntu` image yourself from your Dockerfile, so why
    * [Building Docker images from the host VM](#vagrant_building)
    * [Managing Docker machines with Vagrant's Docker provider](#vagrant_provider)
    * [Launching a Vagrant-managed docker machine](#vagrant_up)
-   * [Login to Vagrant-managed Docker machines via SSH](#vagrant_ssh)
-   * [Other Vagrant commands on Docker machines](#vagrant_other_commands)
+   * [Useful Vagrant commands on Docker machines](#vagrant_commands)
    * [Vagrant multi-machine configurations](#vagrant_multimachine)
  * [Conclusion](#conclusion)
 
@@ -629,8 +628,9 @@ The following example Vagrantfile defines a Docker machine built from a Dockerfi
       # Disable the default Vagrant synced folder
       config.vm.synced_folder ".", "/vagrant", :disabled => true
   
-      # Docker containers use root user instead of vagrant
+      # Login to Docker container as root using insecure key
       config.ssh.username = 'root'
+      config.ssh.private_key_path = '/path-to/baseimage-docker/image/insecure_key'
 
     end
 
@@ -645,27 +645,15 @@ To launch your Docker machine from Vagrant you must tell Vagrant to use the Dock
 
 Vagrant will automatically start the host VM if needed.
 
-As of version 1.6.3, Vagrant is unable to tell when a baseimage-docker machine has fully started, so the above command will timeout with an error even when the Docker container is running normally. You can let the command timeout or interrupt it early and the container should still continue to run.
+<a name="vagrant_commands"></a>
+### Useful Vagrant commands for Docker machines
 
-<a name="vagrant_ssh"></a>
-### Login to Vagrant-managed Docker machines via SSH
-
-To use `vagrant ssh` on a Docker machine configured through Vagrant you will need to use the SSH key for the Docker image. For machines using the default insecure key, the following should work:
-
-    vagrant ssh -- -i /path-to/baseimage-docker/image/insecure_key
-
-Alternately, you can add the Docker machine's SSH key to your local machine's ssh agent.
-
-<a name="vagrant_other_operations"></a>
-### Other Vagrant commands for Docker machines
-
-Some other useful Vagrant commands for Docker machines:
-
+* `vagrant ssh` to get a login shell into a running container (assuming SSH is enabled)
 * `vagrant suspend` stops a container
 * `vagrant resume` restarts a stopped container
 * `vagrant halt` stops and deletes a container
-* `vagrant reload --provider=docker` stops and recreates a container
-* `vagrant docker-logs` shows the container's logs
+* `vagrant reload` stops and recreates a container
+* `vagrant docker-logs` shows the container's docker logs
 
 If you need more control over your running Docker containers than what Vagrant provides, login to the Docker host and use the native Docker command set.
 
@@ -680,6 +668,7 @@ You can define multiple Docker machines in a single Vagrant file. The follow exa
       dockerhost_vagrantfile = '/path-to/baseimage-docker/Vagrantfile'
       config.vm.synced_folder ".", "/vagrant", :disabled => true
       config.ssh.username = 'root'
+      config.ssh.private_key_path = '/path-to/baseimage-docker/image/insecure_key'
   
       # Docker machines
   

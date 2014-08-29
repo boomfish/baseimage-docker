@@ -599,21 +599,21 @@ Read the Vagrantfile for the complete list of configuration options.
 
 The Vagrantfile uses the Docker provisioner to install the latest copy of Docker on the VM. If the Docker on your VM becomes out-of-date you can update it with `vagrant provision`.
 
-Although the recommended method for managing Docker containers through Vagrant is to use the [Docker provider](#vagrant_provider), you can use the Docker provisioner in the host VM's Vagrantfile to build Docker images and run Docker containers for you. You can read more about the Docker provisioner in the [Vagrant documentation for Docker Provisioner](https://docs.vagrantup.com/v2/provisioning/docker.html) for details.
+Although the recommended method for managing Docker containers through Vagrant is to use the [Docker provider](#vagrant_provider), you can use the Docker provisioner in the host VM's Vagrantfile to build Docker images and run Docker containers when the host VM starts. You can read more about the Docker provisioner in the [Vagrant documentation for Docker Provisioner](https://docs.vagrantup.com/v2/provisioning/docker.html) for details.
 
 The Docker provisioner configuration in the supplied Vagrantfile contains a run definition for a Docker registry but this is disabled by default.
 
 <a name="vagrant_building"></a>
 ### Building Docker images from the host VM
 
-If you create a `build` folder under baseimage-docker it shared with the Vagrant VM as /vagrant/build but is ignored by Git. This makes it suitable for storing your Docker projects: can edit the project files from your host machine and the Docker host can access them to build your Docker images.
+If you create a `build` folder under baseimage-docker it shared with the Vagrant VM as /vagrant/build but is ignored by Git. This makes it suitable for storing your Docker projects: you can edit the project files from your host machine and the Docker host can access them via the synced folder to build your Docker images.
 
 <a name="vagrant_provider"></a>
 ### Managing Docker machines with Vagrant's Docker provider
 
 If you are running Vagrant 1.6 or later, you can use the Docker provider to define Docker machines. If you are running Vagrant from a Linux host that can support Docker, Vagrant will use your local machine as the Docker host, otherwise it will manage a Linux VM (such as the one defined in our Vagrantfile) to act as the Docker host. Full details are available in the [Vagrant documentation for Docker Provider](https://docs.vagrantup.com/v2/docker/index.html).
 
-The following example Vagrantfile defines a Docker machine built from a Dockerfile and forwards port 48081 on the VM host to port 8081 on the container. Since 48081 is in the default forwarding range for the Docker host VM, you should be able to access the exposed container port via port 48081 on your local machine.
+The following example Vagrantfile defines a Docker machine built from a Dockerfile and forwards port 48081 on the Docker host to port 8081 on the container.
 
     Vagrant.configure('2') do |config|
 
@@ -634,7 +634,7 @@ The following example Vagrantfile defines a Docker machine built from a Dockerfi
 
     end
 
-Note that the vagrant_vagrantfile option is used only if it is needed. 
+If the native host can run Docker natively then any port forward will expose the port to the host. On the other hand, if Vagrant needs to run a VM for the Docker host then the port will only be exposed on the host if the "host port" is in the range of ports forwarded for the Docker host VM: see [Docker host VM configuration](#vagrant_configuration).
 
 <a name="vagrant_up"></a>
 ### Launching a Vagrant-managed Docker machine

@@ -67,13 +67,13 @@ You can configure the stock `ubuntu` image yourself from your Dockerfile, so why
  * [Building the image yourself](#building)
  * [Using Docker through Vagrant](#vagrant)
    * [Using Vagrant to run a Docker host VM](#vagrant_host)
-   * [Docker host VM configuration options](#vagrant_configuration)
-   * [Extending the Docker provisioner in the host VM](#vagrant_provisioner)
-   * [Building Docker images from the host VM](#vagrant_building)
+     * [Docker host VM configuration options](#vagrant_configuration)
+     * [Extending the Docker provisioner in the host VM](#vagrant_provisioner)
+     * [Building Docker images from the host VM](#vagrant_building)
    * [Managing Docker machines with Vagrant's Docker provider](#vagrant_provider)
-   * [Launching a Vagrant-managed docker machine](#vagrant_up)
-   * [Useful Vagrant commands on Docker machines](#vagrant_commands)
-   * [Vagrant multi-machine configurations](#vagrant_multimachine)
+     * [Launching a Vagrant-managed docker machine](#vagrant_up)
+     * [Useful Vagrant commands on Docker machines](#vagrant_commands)
+     * [Vagrant multi-machine configurations](#vagrant_multimachine)
  * [Conclusion](#conclusion)
 
 -----------------------------------------
@@ -583,7 +583,7 @@ The Vagrantfile supports the VirtualBox and VMWare Fusion providers and is built
 You can use `vagrant up` to launch the Docker host VM and `vagrant ssh` to login to the Docker host to work with your Docker images and containers.
 
 <a name="vagrant_configuration"></a>
-### Docker host VM configuration options
+#### Docker host VM configuration options
 
 The Vagrantfile for the Docker host has a number of settings that can be configured via environment variables:
 
@@ -595,7 +595,7 @@ The Vagrantfile for the Docker host has a number of settings that can be configu
 Read the Vagrantfile for the complete list of configuration options.
 
 <a name="vagrant_provisioner"></a>
-### Extending the Docker provisioner in the host VM
+#### Extending the Docker provisioner in the host VM
 
 The Vagrantfile uses the Docker provisioner to install the latest copy of Docker on the VM. If the Docker on your VM becomes out-of-date you can update it with `vagrant provision`.
 
@@ -604,7 +604,7 @@ Although the recommended method for managing Docker containers through Vagrant i
 The Docker provisioner configuration in the supplied Vagrantfile contains a run definition for a Docker registry but this is disabled by default.
 
 <a name="vagrant_building"></a>
-### Building Docker images from the host VM
+#### Building Docker images from the host VM
 
 If you create a `build` folder under baseimage-docker it shared with the Vagrant VM as /vagrant/build but is ignored by Git. This makes it suitable for storing your Docker projects: you can edit the project files from your host machine and the Docker host can access them via the synced folder to build your Docker images.
 
@@ -637,7 +637,7 @@ The following example Vagrantfile defines a Docker machine built from a Dockerfi
 If the native host can run Docker natively then any port forward will expose the port to the host. On the other hand, if Vagrant needs to run a VM for the Docker host then the port will only be exposed on the host if the "host port" is in the range of ports forwarded for the Docker host VM: see [Docker host VM configuration](#vagrant_configuration).
 
 <a name="vagrant_up"></a>
-### Launching a Vagrant-managed Docker machine
+#### Launching a Vagrant-managed Docker machine
 
 To launch your Docker machine from Vagrant you must tell Vagrant to use the Docker provider:
 
@@ -646,7 +646,7 @@ To launch your Docker machine from Vagrant you must tell Vagrant to use the Dock
 Vagrant will automatically start the host VM if needed.
 
 <a name="vagrant_commands"></a>
-### Useful Vagrant commands for Docker machines
+#### Useful Vagrant commands for Docker machines
 
 * `vagrant ssh` to get a login shell into a running container (assuming SSH is enabled)
 * `vagrant suspend` stops a container
@@ -658,7 +658,7 @@ Vagrant will automatically start the host VM if needed.
 If you need more control over your running Docker containers than what Vagrant provides, login to the Docker host and use the native Docker command set.
 
 <a name="vagrant_multimachine"></a>
-### Vagrant multi-machine configurations
+#### Vagrant multi-machine configurations
 
 You can define multiple Docker machines in a single Vagrant file. The follow example defines two Docker machines (mydocker1 and mydocker2) but starts only the first machine on `vagrant up`:
 

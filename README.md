@@ -608,6 +608,18 @@ The Docker provisioner configuration in the supplied Vagrantfile contains a run 
 
 If you create a `build` folder under baseimage-docker it shared with the Vagrant VM as /vagrant/build but is ignored by Git. This makes it suitable for storing your Docker projects: you can edit the project files from your host machine and the Docker host can access them via the synced folder to build your Docker images.
 
+To clone a Docker project so that it can be built in the VM: 
+
+    cd /path-to/baseimage-docker
+    mkdir build
+    cd build
+    git clone GIT-PROJECT-URL PROJECT_NAME
+
+To build the container, `vagrant ssh` into the Docker host and run the build from the mapped folder:
+
+    cd /vagrant/build/PROJECT_NAME
+    sudo docker build
+
 <a name="vagrant_provider"></a>
 ### Managing Docker machines with Vagrant's Docker provider
 
